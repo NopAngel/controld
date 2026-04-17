@@ -1,0 +1,4 @@
+Name=my-app
+Exec=/bin/date
+Arg=+%s
+After=database
