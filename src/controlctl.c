@@ -75,7 +75,7 @@ main (int argc, char *argv[])
 
   if (!received_anything && strcmp(argv[1], "list") != 0)
     {
-      printf ("[controlctl] Command '%s' sent successfully.\n", argv[1]);
+      printf ("[controlctl] command '%s' sent successfully.\n", argv[1]);
     }
 
   close (sock);

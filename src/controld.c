@@ -19,10 +19,14 @@
 #include <linux/rtnetlink.h>
 #include <net/if.h>
 
+
+
 #define SOCKET_PATH "/tmp/controld.sock"
 #define UNITS_DIR "units/"
 #define LOGS_DIR "logs/"
 #define MAX_SERVICES 10
+
+
 
 struct unit {
   char name[64];
@@ -118,14 +122,17 @@ static void load_units(void) {
 
 int main(void) {
   signal(SIGINT, handle_signal); signal(SIGTERM, handle_signal);
-  printf("controld v1.0 - Full Network Stack\n");
+  printf("controld v1.0\n");
   mkdir(LOGS_DIR, 0777); load_units();
   int server_sock = socket(AF_UNIX, SOCK_STREAM, 0);
   fcntl(server_sock, F_SETFL, O_NONBLOCK);
+  
+  
   struct sockaddr_un addr = { .sun_family = AF_UNIX };
   strncpy(addr.sun_path, SOCKET_PATH, sizeof(addr.sun_path)-1);
   unlink(SOCKET_PATH); bind(server_sock, (struct sockaddr *)&addr, sizeof(addr));
   listen(server_sock, 5);
+
 
   while (keep_running) {
     int status; pid_t dead = waitpid(-1, &status, WNOHANG);
@@ -163,6 +170,7 @@ int main(void) {
     }
     usleep(300000);
   }
+
   unlink(SOCKET_PATH);
   return 0;
 }
